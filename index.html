@@ -118,13 +118,19 @@
             info.update(layer.feature.properties);
         }
 
+        var previousTarget;
         function resetHighlight(e) {
             geojsonLayer.resetStyle(e.target);
             info.update();
         }
 
-        function zoomToFeature(e) {
-            mymap.fitBounds(e.target.getBounds());
+        function clickFeature(e) {        
+            if (previousTarget) {
+                geojsonLayer.resetStyle(previousTarget.target);
+                info.update();
+            }
+            previousTarget = e;
+            highlightFeature(e);
         }
 
         var info = L.control();
@@ -190,8 +196,8 @@
             onEachFeature: function (featureData, featureLayer) {
                 featureLayer.on({
                     mouseover: highlightFeature,
-                    mouseout: resetHighlight
-                    // click: zoomToFeature
+                    mouseout: resetHighlight,
+                    click: clickFeature
                 });
             }
         });       
