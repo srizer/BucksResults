@@ -27,7 +27,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
             width: 300px;
-            height: 200px;
+            height: 150px;
         }
         .info h4 {
             margin: 0 0 5px;
@@ -64,11 +64,16 @@
                 var _totalVotes = _bidenVotes + _trumpVotes + _jorgeVotes + _writeVotes;
                 var _candidateLead = _bidenVotes - _trumpVotes;
 
+                var _bidenPercent = (_bidenVotes / _totalVotes) * 100;
+                var _bidenPercentCleaned = Number.parseFloat(_bidenPercent).toFixed(2);
+                var _trumpPercent = (_trumpVotes / _totalVotes) * 100
+                var _trumpPercentCleaned = Number.parseFloat(_trumpPercent).toFixed(2)
+
                 return {
                     bidenVotes: _bidenVotes,
-                    bidenPercent: Number.parseFloat(_bidenVotes / _totalVotes).toFixed(3),
+                    bidenPercent: _bidenPercentCleaned,
                     trumpVotes: _trumpVotes, 
-                    trumpPercent: Number.parseFloat(_trumpVotes / _totalVotes).toFixed(3),
+                    trumpPercent: _trumpPercentCleaned,
                     candidateLead: _candidateLead,
                     bidenWon: _candidateLead > 0
                 }
@@ -148,8 +153,11 @@
                 this._div.innerHTML = 
                     '<h4>Results by Precinct</h4>' +
                     '<br /><b>' + props.NAME10_1 + '</b><br />' +
-                    '    Joseph R. Biden: ' + resultData.bidenVotes + ' (' + (resultData.bidenPercent * 100) + '%)<br />' +
-                    '    Donald J. Trump: ' + resultData.trumpVotes + ' (' + (resultData.trumpPercent * 100) + '%)';
+                    '<ul style="list-style-type:none">' + 
+                    '<li>Joseph R. Biden: ' + resultData.bidenVotes + ' (' + (resultData.bidenPercent) + '%)<br /></li>' +
+                    '<li>Donald J. Trump: ' + resultData.trumpVotes + ' (' + (resultData.trumpPercent) + '%)</li>' + 
+                    ( resultData.bidenWon ? '<li>Margin: <b>Biden +' + resultData.candidateLead + '</b></li></ul>' : '<li>Margin: <b>Trump +' + (resultData.candidateLead * -1) + '</b></li></ul>');
+                    //'<li>Total Votes: ' + resultData.totalVotes + '</li></ul>';
             } else {
                 this._div.innerHTML = 
                     '<h4>Results by Precinct</h4>' +
